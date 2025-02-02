@@ -6,8 +6,6 @@ import { UserDTO } from './dto/user.dto';
 import * as bcrypt from 'bcrypt';
 
 type ReturnUserEntity = Promise<User | null>;
-type ReturnResolve = Promise<void>;
-
 @Injectable()
 export class UserService {
   constructor(
@@ -22,9 +20,8 @@ export class UserService {
     return await this.userRepository.findOne(option);
   }
 
-  async encryptPassword(user: UserDTO): ReturnResolve {
-    user.password = await bcrypt.hash(user.password, 10);
-    return Promise.resolve();
+  async encryptPassword(userDto: UserDTO) {
+    userDto.password = await bcrypt.hash(userDto.password, 10);
   }
 
   async save(user: UserDTO) {
