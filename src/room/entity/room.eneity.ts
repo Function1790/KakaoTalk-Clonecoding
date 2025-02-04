@@ -4,8 +4,10 @@ import {
   Entity,
   JoinTable,
   ManyToMany,
+  OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
+import { ChatMessage } from './chat-message.entity';
 
 @Entity()
 export class Room {
@@ -18,4 +20,7 @@ export class Room {
   @ManyToMany(() => User)
   @JoinTable()
   members: User[];
+
+  @OneToMany(() => ChatMessage, (message) => message.room)
+  messages: ChatMessage[];
 }

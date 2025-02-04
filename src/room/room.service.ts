@@ -11,7 +11,10 @@ export class RoomService {
   ) {}
 
   async findById(id: number): Promise<Room | null> {
-    return await this.roomRepository.findOneBy({ id: id });
+    return await this.roomRepository.findOne({
+      where: { id: id },
+      relations: ['members', 'messages', 'messages.sender'],
+    });
   }
 
   async create(users: User[]) {
