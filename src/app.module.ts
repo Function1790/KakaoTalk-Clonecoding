@@ -6,10 +6,11 @@ import { AuthService } from './auth/auth.service';
 import { AuthModule } from './auth/auth.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { User } from './auth/entity/user.entity';
+import { RoomModule } from './room/room.module';
+import { Room } from './room/entity/room.eneity';
 
 @Module({
   imports: [
-    AuthModule,
     TypeOrmModule.forRoot({
       type: 'mysql',
       host: 'localhost',
@@ -17,9 +18,11 @@ import { User } from './auth/entity/user.entity';
       username: 'root',
       password: '1790',
       database: 'kakao',
-      entities: [User],
+      entities: [User, Room],
       synchronize: true,
     }),
+    AuthModule,
+    RoomModule,
   ],
   controllers: [AppController, AuthController],
   providers: [AppService, AuthService],

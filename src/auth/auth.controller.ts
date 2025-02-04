@@ -5,11 +5,12 @@ import {
   Post,
   Redirect,
   Render,
+  Req,
   Res,
 } from '@nestjs/common';
 import { UserDTO } from './dto/user.dto';
 import { AuthService } from './auth.service';
-import { Response } from 'express';
+import { Request, Response } from 'express';
 
 @Controller('auth')
 export class AuthController {
@@ -40,7 +41,6 @@ export class AuthController {
       maxAge: 900000,
       httpOnly: true,
     });
-    console.log(authJwt);
     return authJwt;
   }
 
@@ -48,5 +48,15 @@ export class AuthController {
   @Redirect('/auth/login', 301)
   async register(@Body() userDto: UserDTO) {
     return await this.authService.register(userDto);
+  }
+
+  @Get('test')
+  isAuthenticated(@Req() req: Request) {
+    const authJwt: string = req.cookies.token as string;
+    const payload = this.authService.vaildateToken(authJwt);
+    if (!payload) {
+      return 'Nah Bro..';
+    }
+    return 'Good';
   }
 }

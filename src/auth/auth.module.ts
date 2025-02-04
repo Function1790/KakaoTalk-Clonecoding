@@ -6,6 +6,7 @@ import { AuthController } from './auth.controller';
 import { UserService } from './user.service';
 import { JwtModule } from '@nestjs/jwt';
 import { PassportModule } from '@nestjs/passport';
+import { RoomModule } from 'src/room/room.module';
 
 @Module({
   imports: [
@@ -15,6 +16,7 @@ import { PassportModule } from '@nestjs/passport';
       signOptions: { expiresIn: '300s' },
     }),
     PassportModule,
+    RoomModule,
   ],
   exports: [TypeOrmModule, AuthService, UserService, JwtModule],
   controllers: [AuthController],

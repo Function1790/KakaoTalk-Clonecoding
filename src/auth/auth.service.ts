@@ -4,12 +4,15 @@ import { UserDTO } from './dto/user.dto';
 import { Payload } from './security/payload.interface';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
+import * as jwt from 'jsonwebtoken';
+import { RoomService } from 'src/room/room.service';
 
 @Injectable()
 export class AuthService {
   constructor(
     private userService: UserService,
     private jwtService: JwtService,
+    private roomService: RoomService,
   ) {}
 
   async register(userDto: UserDTO) {
@@ -19,7 +22,10 @@ export class AuthService {
     if (existUser) {
       return false;
     }
-    return await this.userService.save(userDto);
+    const user = await this.userService.save(userDto);
+    const user1 = await this.userService.findById(5);
+    await this.roomService.create([user, user1]);
+    return;
   }
 
   async vaildateUser(
@@ -41,5 +47,14 @@ export class AuthService {
     return {
       accessToken: this.jwtService.sign(payload),
     };
+  }
+
+  vaildateToken(authJwt: string): Payload | false {
+    try {
+      const payload = jwt.verify(authJwt, 'SECRET');
+      return payload as Payload;
+    } catch {
+      return false;
+    }
   }
 }

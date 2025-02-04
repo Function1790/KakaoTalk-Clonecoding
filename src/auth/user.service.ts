@@ -24,8 +24,8 @@ export class UserService {
     userDto.password = await bcrypt.hash(userDto.password, 10);
   }
 
-  async save(user: UserDTO) {
+  async save(user: UserDTO): Promise<User> {
     await this.encryptPassword(user);
-    await this.userRepository.save(user);
+    return await this.userRepository.save(user);
   }
 }
