@@ -1,49 +1,51 @@
 <!DOCTYPE html>
 <html lang="ko">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>실시간 채팅</title>
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
+
 <body class="bg-gray-100 h-screen flex flex-col">
-    
+
     <!-- 헤더 -->
     <header class="bg-green-600 text-white p-4 text-center text-xl font-bold">
         실시간 채팅 🗨️
     </header>
-    
+
     <!-- 채팅창 -->
     <main class="flex-1 p-4 flex flex-col overflow-hidden">
         <div class="bg-white shadow-lg rounded-lg flex-1 p-4 overflow-y-auto" id="chat-box">
             <!-- 메시지가 들어갈 공간 -->
             <div class="space-y-2" id="messages">
-                <% messages.forEach((message) => { %>
+                <% messages.forEach((message)=> { %>
                     <% if(message.sender.id==5) { %>
                         <div class="p-2 bg-green-500 text-white rounded w-max self-end">
                             <%= message.content %>
                         </div>
-                    <% } else {%>
-                        <div class="p-2 bg-gray-200 rounded w-max">
-                            <%= message.content %>
-                        </div>
-                    <% } %>
-                <% }) %>
+                        <% } else {%>
+                            <div class="p-2 bg-gray-200 rounded w-max">
+                                <%= message.content %>
+                            </div>
+                            <% } %>
+                                <% }) %>
             </div>
         </div>
     </main>
-    
+
     <!-- 입력창 -->
     <footer class="p-4 bg-white shadow-lg flex gap-2">
         <form action="/chat/<%= id %>" method="post">
-        <input type="text" name="content"  placeholder="메시지를 입력하세요...">
-        <input type="number"  name="senderId" value="5" hidden>
-        <button type="submit" id="send-button" class="bg-green-600 text-white p-2 rounded">전송</button>
+            <input type="text" name="content" placeholder="메시지를 입력하세요...">
+            <input type="number" name="senderId" value="5" hidden>
+            <button type="submit" id="send-button" class="bg-green-600 text-white p-2 rounded">전송</button>
         </form>
     </footer>
-    
+
     <script>
-        document.getElementById("send-button").addEventListener("click", function() {
+        document.getElementById("send-button").addEventListener("click", function () {
             let input = document.getElementById("message-input");
             let message = input.value.trim();
             if (message) {
@@ -56,5 +58,24 @@
             }
         });
     </script>
+    <script src="https://cdn.socket.io/4.0.0/socket.io.min.js"></script>
+    <script>
+        const socket = io('http://localhost:3001', { withCredentials: true }); // WebSocket 서버 주소
+
+        // 메시지 보내기
+        function sendMessage() {
+            const msg = document.getElementById('msgInput').value;
+            socket.emit('message', msg);
+        }
+
+        // 메시지 받기
+        socket.on('message', (data) => {
+            console.log('새 메시지:', data);
+        });
+    </script>
+
+    <input type="text" id="msgInput" placeholder="메시지를 입력하세요" />
+    <button onclick="sendMessage()">전송</button>
 </body>
+
 </html>

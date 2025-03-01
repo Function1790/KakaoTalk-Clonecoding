@@ -39,7 +39,7 @@ export class AuthController {
     res.setHeader('Authorization', 'Bearer ' + authJwt.accessToken);
     res.cookie('token', authJwt.accessToken, {
       maxAge: 900000,
-      httpOnly: true,
+      httpOnly: false,
     });
     return authJwt;
   }

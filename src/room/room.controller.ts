@@ -18,6 +18,12 @@ export class RoomController {
     private chatMessageService: ChatMessageService,
   ) {}
 
+  @Render('test')
+  @Get()
+  sock_test() {
+    return;
+  }
+
   @Get(':id')
   @Render('room')
   async chat(@Param('id') id: number) {

@@ -9,6 +9,7 @@ import { User } from './auth/entity/user.entity';
 import { RoomModule } from './room/room.module';
 import { Room } from './room/entity/room.eneity';
 import { ChatMessage } from './room/entity/chat-message.entity';
+import { ChatGateway } from './websocket/chat.gateway';
 
 @Module({
   imports: [
@@ -26,6 +27,6 @@ import { ChatMessage } from './room/entity/chat-message.entity';
     RoomModule,
   ],
   controllers: [AppController, AuthController],
-  providers: [AppService, AuthService],
+  providers: [AppService, AuthService, ChatGateway],
 })
 export class AppModule {}

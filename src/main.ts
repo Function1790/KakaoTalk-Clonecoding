@@ -7,15 +7,14 @@ import * as cookieParser from 'cookie-parser';
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
 
-  //Cookie
+  // Cookie
   app.enableCors({
-    // cors 설정
-    origin: 'http://localhost:3000',
+    origin: 'http://127.0.0.1:3000', // 특정 도메인 설정
     credentials: true, // 쿠키를 사용할 수 있게 해당 값을 true로 설정
   });
   app.use(cookieParser());
 
-  //View
+  // View
   app.useStaticAssets(join(__dirname, '..', 'public'));
   app.setBaseViewsDir(join(__dirname, '..', 'views'));
   app.setViewEngine('ejs');
