@@ -9,12 +9,16 @@ export class Room extends Set<Client> {
 
   join(client: Client) {
     this.add(client);
-    this.emit(client, 'message', { message: '[System] Join' });
+    this.emit(client, 'message', {
+      message: `[System] ${client.data.name} Join`,
+    });
   }
 
   leave(client: Client) {
     this.delete(client);
-    this.emit(client, 'message', { message: '[System] leave' });
+    this.emit(client, 'message', {
+      message: `[System] ${client.data.name} leave`,
+    });
   }
 
   emit(from: Client, event: string, data) {

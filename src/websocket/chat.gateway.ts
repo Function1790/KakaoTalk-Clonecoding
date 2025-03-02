@@ -6,13 +6,14 @@ import {
   OnGatewayConnection,
   ConnectedSocket,
 } from '@nestjs/websockets';
-import { Server, Socket } from 'socket.io';
+import { Server } from 'socket.io';
 import { parse } from 'cookie';
 import { verifyToken } from './jwt.decode';
 import { ChatClient, ClientData } from './client';
 import { Logger } from '@nestjs/common';
 import { RoomManager } from './room';
 
+// TODO: Provider로 승급 후 Controller에서 이용
 @WebSocketGateway({ cors: { origin: '*' } }) // CORS 설정
 export class ChatGateway implements OnGatewayConnection {
   @WebSocketServer()
@@ -25,17 +26,14 @@ export class ChatGateway implements OnGatewayConnection {
   }
 
   // 클라이언트 연결 시 실행 (쿠키 출력)
-  handleConnection(client: Socket) {
-    const username = `User-${client.id.slice(0, 5)}`;
-    this.logger.log(`Client connected: ${client.id} as ${username}`);
-  }
+  handleConnection() {}
 
   verify(cookieString: string) {
     const jwtString = parse(cookieString)?.token;
     if (!jwtString) return;
     const payload = verifyToken(jwtString);
     if (!payload) return;
-    console.log('Payload:', payload);
+    //this.logger.log('Payload:', payload);
     return payload;
   }
 
@@ -43,23 +41,29 @@ export class ChatGateway implements OnGatewayConnection {
   @SubscribeMessage('init')
   handleInit(
     @ConnectedSocket() client: ChatClient,
-    @MessageBody() data: { message: string; url: string },
+    @MessageBody() data: { message: string; roomid: string },
   ) {
-    const roomId = '1';
+    const roomId = data.roomid;
+    // TODO: DB에 room이 존재하지 않을 경우
     // 인증
     const cookieString = data.message || '';
     const payload = this.verify(cookieString);
-    if (!payload) return;
+    if (!payload) {
+      client.emit('error', '인가되지 않은 토큰입니다. 다시 로근인 해주세요.');
+      return;
+    }
     client.data = payload as ClientData;
     client.data.roomId = roomId;
     this.rooms.join(roomId, client);
-    console.log(`🔥 Client connected: ${client.data.name}`);
+    this.logger.log(
+      `🔥 Client connected: ${client.data.name} [roomId: ${roomId}]`,
+    );
   }
 
   handleDisconnect(@ConnectedSocket() client: ChatClient) {
     const roomId = client.data.roomId;
     this.rooms.leave(roomId, client);
-    console.log(`🔥 Client disconnected: ${client.data.name}`);
+    this.logger.log(`🔥 Client disconnected: ${client.data.name}`);
   }
 
   // 채팅
@@ -68,7 +72,7 @@ export class ChatGateway implements OnGatewayConnection {
     @ConnectedSocket() client: ChatClient,
     @MessageBody() data: { message: string },
   ) {
-    console.log(`Received: ${data.message}`);
+    // TODO: 인가되지 않은 유저가 접근할 경우
     this.rooms.send(client, `${client.data.name} said: ${data.message}`);
   }
 }
