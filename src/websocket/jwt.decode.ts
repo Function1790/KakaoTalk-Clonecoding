@@ -10,6 +10,7 @@ export function verifyToken(token: string) {
     return decoded;
   } catch {
     console.error('Invalid Token:', token);
+    console.log('[Error] : 인가되지 않은 토큰으로 인한 오류');
     return null;
   }
 }

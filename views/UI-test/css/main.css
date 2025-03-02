@@ -1,0 +1,26 @@
+:root {
+  --start-y-axis : 90px
+}
+
+.side-bar {
+  padding-top: var(--start-y-axis);
+  background-color: #ECECED;
+  width: 130px;
+  border-right: 1px solid #DDD;
+  align-items: center;
+}
+
+.content {
+  padding-top: var(--start-y-axis);
+  flex: 1
+}
+
+.section-button {
+  opacity: 0.5;
+  cursor: pointer;
+  margin-bottom: 60px
+}
+
+.selected {
+  opacity: 1;
+}

@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/login.css">
+  <title>Document</title>
+</head>
+
+<body>
+  <div class="root center">
+    <div class="content flex-col">
+      <div class="icon-wrap center">
+        <img class="logo" src="/img/logo.png">
+      </div>
+      <div class="form-wrap">
+        <form action="/auth/login" method="post">
+          <div class="flex-col form-inner">
+            <div class="flex-col input-wrap">
+              <input type="text" id="name" name="name" placeholder="이름">
+              <div class="br"></div>
+              <input type="text" id="password" name="password" placeholder="비밀번호">
+            </div>
+            <button class="submit">로그인</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</body>
+<script>
+  const input1 = document.getElementById('name');
+  const input2 = document.getElementById('password');
+  const submit = document.getElementsByClassName('submit')[0];
+
+  function check(){
+    if(input1.value.length > 1 && input2.value.length > 1){
+      submit.className="submit submit-ready"
+    } else {
+      submit.className="submit"
+    }
+  }
+
+  input1.onkeypress = check
+  input2.onkeypress = check
+</script>
+</html>

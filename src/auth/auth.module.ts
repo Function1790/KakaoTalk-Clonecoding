@@ -13,7 +13,7 @@ import { RoomModule } from 'src/room/room.module';
     TypeOrmModule.forFeature([User]),
     JwtModule.register({
       secret: 'SECRET',
-      signOptions: { expiresIn: '300s' },
+      signOptions: { expiresIn: '30000s' },
     }),
     PassportModule,
     RoomModule,

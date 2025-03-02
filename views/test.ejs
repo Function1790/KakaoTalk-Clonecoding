@@ -1,11 +1,13 @@
 <!DOCTYPE html>
 <html lang="ko">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>WebSocket Chat</title>
     <script src="https://cdn.socket.io/4.5.4/socket.io.min.js"></script>
 </head>
+
 <body>
     <h1>WebSocket Chat</h1>
     <input type="text" id="messageInput" placeholder="메시지를 입력하세요" />
@@ -13,11 +15,15 @@
     <ul id="messages"></ul>
 
     <script>
+
         const socket = io('http://localhost:3000');
-        socket.emit('cookie', { message: document.cookie });
+        socket.emit('init',
+            { message: document.cookie, url: document.URL }
+        );
 
         // 서버에서 메시지를 받으면 화면에 추가
         socket.on('message', (data) => {
+            console.log(data)
             const li = document.createElement('li');
             li.textContent = data.message;
             document.getElementById('messages').appendChild(li);
@@ -31,4 +37,5 @@
         }
     </script>
 </body>
+
 </html>
