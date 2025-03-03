@@ -1,5 +1,5 @@
 :root {
-  --start-y-axis : 90px
+  --start-y-axis: 83px
 }
 
 .side-bar {
@@ -18,7 +18,8 @@
 .section-button {
   opacity: 0.5;
   cursor: pointer;
-  margin-bottom: 60px
+  margin: 23px; 
+  padding:8px;
 }
 
 .selected {

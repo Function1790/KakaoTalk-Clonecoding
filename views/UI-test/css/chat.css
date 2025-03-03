@@ -1,0 +1,121 @@
+body {
+  background-color: #f2f2f2;
+}
+
+.chat-container {
+  width: 400px;
+  height: 700px;
+  background-color: #d2e0f1;
+  margin: 20px auto;
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  position: relative;
+}
+
+.chat-header {
+  padding: 10px;
+  background-color: #b0c4de;
+  font-size: 18px;
+  font-weight: bold;
+  text-align: center;
+}
+
+.chat-messages {
+  flex-grow: 1;
+  padding: 10px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+}
+
+/* 2025-03-03 19:00 */
+.message-wrap {
+  margin: 5px;
+  display: flex;
+  flex-direction: row;
+}
+
+.message-header {
+  margin-right: 3px;
+}
+
+.message-container {
+  flex: 1;
+  max-height: max-content;
+  display: flex;
+  flex-direction: column;
+}
+
+.message-icon {
+  width: 42px;
+  height: 42px;
+  border-radius: 42%;
+  background-color: #84a8d8;
+}
+
+.message-from {
+  font-weight: 400;
+  font-size: 14px;
+  margin: 4px 4px;
+}
+
+.message {
+  max-width: 75%;
+  width: fit-content;
+  padding: 10px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 400;
+  white-space: normal;   /* 75% 초과 시 자동 줄바꿈 */
+  word-break: break-word;
+}
+/* 2025-03-03 19:00 */
+
+.receive-message {
+  background-color: white;
+  align-self: flex-start;
+  border: 1px solid #ccc;
+  position: relative;
+}
+
+.send-message {
+  background-color: #ffeb3b;
+  align-self: flex-end;
+  position: relative;
+}
+
+.reply {
+  background-color: rgba(255, 255, 255, 0.7);
+  padding: 5px;
+  border-left: 3px solid gray;
+  margin-bottom: 5px;
+  font-size: 12px;
+  color: gray;
+}
+
+.chat-input {
+  display: flex;
+  padding: 10px;
+  background-color: #fff;
+  border-top: 1px solid #ddd;
+}
+
+.chat-input input {
+  flex-grow: 1;
+  padding: 8px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  outline: none;
+}
+
+.chat-input button {
+  margin-left: 5px;
+  padding: 8px 12px;
+  border: none;
+  background-color: #ffeb3b;
+  border-radius: 5px;
+  cursor: pointer;
+  font-weight: bold;
+}

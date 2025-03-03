@@ -73,6 +73,6 @@ export class ChatGateway implements OnGatewayConnection {
     @MessageBody() data: { message: string },
   ) {
     // TODO: 인가되지 않은 유저가 접근할 경우
-    this.rooms.send(client, `${client.data.name} said: ${data.message}`);
+    this.rooms.send(client, data.message);
   }
 }

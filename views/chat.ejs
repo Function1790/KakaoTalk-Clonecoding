@@ -14,25 +14,17 @@
   <div class="chat-container">
     <div class="chat-header">방제목</div>
     <div class="chat-messages">
-      <div class="message-wrap">
-        <div class="message-header">
-          <div class="message-icon"></div>
-        </div>
-        <div class="message-container">
-          <div class="message-from">관리자</div>
-          <div class="message receive-message">받은 메시지</div>
-        </div>
-      </div>
-      <div class="message send-message">보낸 메시지</div>
     </div>
     <div class="chat-input">
       <input type="text" name="message" id="message" placeholder="메시지 입력">
       <button id="send">전송</button>
     </div>
+    <input type="hidden" id="roomid" value="<%= roomid %>" />
   </div>
 
 </body>
 <script>
+  // Viewer
   const messageInput = document.getElementById('message');
   const sendBtn = document.getElementById('send');
   const chatArea = document.getElementsByClassName('chat-messages')[0];
@@ -46,10 +38,33 @@
   function onReceive(message) {
     addMessageBubble(message, 'receive');
   }
+</script>
+<script src="https://cdn.socket.io/4.5.4/socket.io.min.js"></script>
+<script>
+  // Socket
+  const roomid = document.getElementById('roomid');
+  const socket = io('http://localhost:3000');
+  socket.emit('init',
+    { message: document.cookie, roomid: roomid.value }
+  );
+
+  // 서버에서 메시지를 받으면 화면에 추가
+  socket.on('message', (data) => {
+    // Receive Data Interface: /src/websocket/room.ts
+    console.log(data);
+    if (data.from == 'me') return; // 보낸 사람이 자신일 경우
+    else if (data.from == 'system') {
+      addMessageBubble(data.message, 'system');
+      return;
+    } else {
+      addMessageBubble(data.message, 'receive');
+    }
+  });
 
   sendBtn.onclick = () => {
     const message = messageInput.value;
     addMessageBubble(message, 'send');
+    socket.emit('message', { message });
     messageInput.value = '';
   }
 </script>

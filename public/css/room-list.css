@@ -1,0 +1,59 @@
+.room {
+  height: 140px;
+  display: flex;
+  flex-direction: row;
+  padding: 10px 23px;
+  user-select: none;
+}
+
+.room:hover {
+  background-color: #F5F5F5;
+}
+
+.room:focus{
+  background-color: #EDEDED;
+}
+
+.room-header{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 10px;
+}
+
+.room-icon {
+  background-color: gray;
+  width: 70px;
+  height: 70px;
+  border-radius: 42%;
+}
+
+.room-content {
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.room-title-wrap {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+}
+
+.room-title {
+  font-weight: 500;
+}
+
+.room-personnel { 
+  margin-left: 8px;
+  color: #949494;
+  font-size: 15px;
+  font-weight: 400;
+}
+
+.room-last-chat { 
+  font-weight: 400;
+  color: #949494;
+}

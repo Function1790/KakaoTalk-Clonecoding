@@ -6,29 +6,45 @@ import {
   Param,
   Post,
   Render,
+  Req,
+  Res,
 } from '@nestjs/common';
 import { RoomService } from './room.service';
 import { ChatMessageDTO } from './dto/chat-message.dto';
 import { ChatMessageService } from './chat-message.service';
+import { Request, Response } from 'express';
+import { AuthService } from 'src/auth/auth.service';
 
 // TODO: room.ejs 삭제하기
 @Controller('chat')
 export class RoomController {
   constructor(
     private roomService: RoomService,
+    private authService: AuthService,
     private chatMessageService: ChatMessageService,
   ) {}
 
-  @Render('test')
   @Get()
+  @Render('room-list')
   sock_test() {
     return;
   }
 
   // TODO: /chat/ 로 접근시 오류 수정
   @Get(':id')
-  @Render('test')
-  async chat(@Param('id') id: number) {
+  @Render('chat')
+  async chat(
+    @Req() req: Request,
+    @Res() res: Response,
+    @Param('id') id: number,
+  ) {
+    const authJwt: string = req.cookies.token as string;
+    const payload = this.authService.vaildateToken(authJwt);
+    if (!payload) {
+      res.redirect('/auth/login');
+      return;
+    }
+
     const room = await this.roomService.findById(id);
     if (!room || !id) {
       console.log(`404 Not Found(Room:{id: ${id}})`);
