@@ -1,4 +1,6 @@
+import { ChatMessageService } from 'src/room/chat-message.service';
 import { ChatClient } from './client';
+import { RoomService } from 'src/room/room.service';
 
 type Client = ChatClient;
 
@@ -40,12 +42,29 @@ export class Room extends Set<Client> {
 }
 
 export class RoomManager extends Map<string, Room> {
-  send(from: Client, message: string) {
+  constructor(
+    private readonly chatMessageService: ChatMessageService,
+    private readonly roomService: RoomService,
+  ) {
+    super();
+  }
+  async send(from: Client, message: string) {
     const room = this.get(from.data.roomId);
     room.emit(from, 'message', {
       from: from.data.name,
       message,
     });
+
+    // 데이터베이스 업로드
+    const roomEntity = await this.roomService.findById(
+      Number(from.data.roomId),
+    );
+    await this.chatMessageService.save(
+      roomEntity,
+      message,
+      Number(from.data.id),
+      'user',
+    );
   }
 
   getRoom(roomId: string): Room {

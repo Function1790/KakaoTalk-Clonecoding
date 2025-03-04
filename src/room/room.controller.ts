@@ -1,17 +1,14 @@
 import {
-  Body,
   Controller,
   Get,
   NotFoundException,
   Param,
-  Post,
   Render,
   Req,
   Res,
   UnauthorizedException,
 } from '@nestjs/common';
 import { RoomService } from './room.service';
-import { ChatMessageDTO } from './dto/chat-message.dto';
 import { ChatMessageService } from './chat-message.service';
 import { Request, Response } from 'express';
 import { AuthService } from 'src/auth/auth.service';
@@ -45,8 +42,9 @@ export class RoomController {
   async chat(
     @Req() req: Request,
     @Res() res: Response,
-    @Param('id') id: number,
+    @Param('id') roomId: number,
   ) {
+    // 인가
     const authJwt: string = req.cookies.token as string;
     const payload = this.authService.vaildateToken(authJwt);
     if (!payload) {
@@ -55,27 +53,24 @@ export class RoomController {
       return;
     }
 
-    const room = await this.roomService.findById(id);
+    // 권한 및 방 존재 확인
+    const room = await this.roomService.findById(roomId);
     const isExist = this.roomService.isExistUser(room, payload.id);
-    if (!room || !id) {
-      console.log(`404 Not Found(Room:{id: ${id}})`);
+    if (!room || !roomId) {
+      console.log(`404 Not Found(Room:{id: ${roomId}})`);
       throw new NotFoundException();
     } else if (!isExist) {
       console.log('401 Unauthorized(Members:', room.members, ')');
       throw new UnauthorizedException();
     }
+
     return {
       // 내부 데이터들 ejs에 넣는거 잊지 않도록 주의하기
-      id: id,
-      messages: room.messages,
+      roomId: roomId,
       room: room,
+      messages: room.messages,
+      userId: payload.id,
     };
-  }
-
-  @Post(':id')
-  async sendChat(@Body() chatMessage: ChatMessageDTO, @Param('id') id: number) {
-    // 채팅 내역 데이터베이스
-    await this.chatMessageService.create(id, chatMessage);
   }
 
   @Get('test')

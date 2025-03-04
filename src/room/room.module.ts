@@ -12,7 +12,7 @@ import { AuthModule } from 'src/auth/auth.module';
     TypeOrmModule.forFeature([Room, ChatMessage]),
     forwardRef(() => AuthModule),
   ],
-  exports: [TypeOrmModule, RoomService],
+  exports: [TypeOrmModule, RoomService, ChatMessageService],
   controllers: [RoomController],
   providers: [RoomService, ChatMessageService],
 })

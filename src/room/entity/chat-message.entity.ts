@@ -7,6 +7,7 @@ import {
   CreateDateColumn,
 } from 'typeorm';
 import { Room } from './room.eneity';
+import { ChatRole } from '../type/role.type';
 
 @Entity()
 export class ChatMessage {
@@ -24,4 +25,7 @@ export class ChatMessage {
 
   @CreateDateColumn()
   createdAt: Date;
+
+  @Column()
+  role: ChatRole;
 }

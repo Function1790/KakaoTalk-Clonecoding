@@ -12,14 +12,21 @@ import { verifyToken } from './jwt.decode';
 import { ChatClient, ClientData } from './client';
 import { Logger } from '@nestjs/common';
 import { RoomManager } from './room';
+import { ChatMessageService } from 'src/room/chat-message.service';
+import { RoomService } from 'src/room/room.service';
 
 // TODO: Provider로 승급 후 Controller에서 이용
 @WebSocketGateway({ cors: { origin: '*' } }) // CORS 설정
 export class ChatGateway implements OnGatewayConnection {
+  constructor(
+    private readonly chatMessageService: ChatMessageService,
+    private readonly roomService: RoomService,
+  ) {}
+
   @WebSocketServer()
   server: Server;
   private logger: Logger = new Logger('EventsGateway');
-  private rooms = new RoomManager();
+  private rooms = new RoomManager(this.chatMessageService, this.roomService);
 
   afterInit() {
     this.logger.log('웹소켓 서버 초기화 ✅');
@@ -68,11 +75,11 @@ export class ChatGateway implements OnGatewayConnection {
 
   // 채팅
   @SubscribeMessage('message')
-  handleMessage(
+  async handleMessage(
     @ConnectedSocket() client: ChatClient,
     @MessageBody() data: { message: string },
   ) {
     // TODO: 인가되지 않은 유저가 접근할 경우
-    this.rooms.send(client, data.message);
+    await this.rooms.send(client, data.message);
   }
 }
