@@ -25,20 +25,22 @@
     </div>
     <div class="content">
       <div class="room-wrap flex-col">
-        <div class="room" tabindex="0">
-          <div class="room-header">
-            <div class="room-icon">
-              <img src="" alt="">
+        <% rooms.forEach((room)=>{ %>
+          <div class="room" tabindex="0">
+            <div class="room-header">
+              <div class="room-icon">
+                <img src="" alt="">
+              </div>
+            </div>
+            <div class="room-content">
+              <div class="room-title-wrap">
+                <div class="room-title"><%= room.name %></div>
+                <div class="room-personnel">4</div>
+              </div>
+              <div class="room-last-chat">Hello world</div>
             </div>
           </div>
-          <div class="room-content">
-            <div class="room-title-wrap">
-              <div class="room-title">Test Room</div>
-              <div class="room-personnel">4</div>
-            </div>
-            <div class="room-last-chat">Hello world</div>
-          </div>
-        </div>
+          <% }) %>
       </div>
     </div>
   </div>

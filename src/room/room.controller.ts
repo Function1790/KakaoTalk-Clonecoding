@@ -26,12 +26,20 @@ export class RoomController {
 
   @Get()
   @Render('room-list')
-  sock_test() {
-    return;
+  async sock_test(@Req() req: Request) {
+    const authJwt: string = req.cookies.token as string;
+    const payload = this.authService.vaildateToken(authJwt);
+    if (!payload) {
+      return;
+    }
+    const rooms = await this.roomService.getRelatedRoomList(payload.id);
+    return {
+      rooms,
+    };
   }
 
   // TODO: /chat/ 로 접근시 오류 수정
-  @Get(':id')
+  @Get('room/:id')
   @Render('chat')
   async chat(
     @Req() req: Request,
@@ -64,7 +72,7 @@ export class RoomController {
     await this.chatMessageService.create(id, chatMessage);
   }
 
-  @Get('/test')
+  @Get('test')
   async test() {
     const room = await this.roomService.findById(1);
     return { memeber: room.members };

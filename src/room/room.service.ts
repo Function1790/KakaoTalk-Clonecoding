@@ -3,12 +3,20 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Room } from './entity/room.eneity';
 import { Repository } from 'typeorm';
 import { User } from 'src/auth/entity/user.entity';
+import { UserService } from 'src/auth/user.service';
 
 @Injectable()
 export class RoomService {
   constructor(
     @InjectRepository(Room) private roomRepository: Repository<Room>,
+    private userService: UserService,
   ) {}
+
+  async getAllRooms(): Promise<Room[]> {
+    return await this.roomRepository.find({
+      relations: ['members', 'messages', 'messages.sender'],
+    });
+  }
 
   async findById(id: number): Promise<Room | null> {
     return await this.roomRepository.findOne({
@@ -24,7 +32,16 @@ export class RoomService {
     }
     await this.roomRepository.save({
       name,
-      users,
+      members: users,
     });
+  }
+
+  async getRelatedRoomList(userId: number) {
+    const rooms = await this.getAllRooms();
+    const filteredRooms = rooms.filter((room) => {
+      // some: 조건에 맞는 것이 있는지 확인
+      return room.members.some((user: User) => user.id === userId);
+    });
+    return filteredRooms;
   }
 }
