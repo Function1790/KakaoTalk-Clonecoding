@@ -28,14 +28,20 @@
         <% rooms.forEach((room)=>{ %>
           <div class="room" tabindex="0">
             <div class="room-header">
-              <div class="room-icon">
-                <img src="" alt="">
-              </div>
+              <a href="/chat/room/<%= room.id %>">
+                <div class="room-icon">
+                  <img src="" alt="">
+                </div>
+              </a>
             </div>
             <div class="room-content">
               <div class="room-title-wrap">
-                <div class="room-title"><%= room.name %></div>
-                <div class="room-personnel">4</div>
+                <div class="room-title">
+                  <%= room.name %>
+                </div>
+                <div class="room-personnel">
+                  <%= room.members.length %>
+                </div>
               </div>
               <div class="room-last-chat">Hello world</div>
             </div>

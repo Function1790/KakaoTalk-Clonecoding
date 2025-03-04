@@ -8,6 +8,7 @@ import {
   Render,
   Req,
   Res,
+  UnauthorizedException,
 } from '@nestjs/common';
 import { RoomService } from './room.service';
 import { ChatMessageDTO } from './dto/chat-message.dto';
@@ -49,20 +50,25 @@ export class RoomController {
     const authJwt: string = req.cookies.token as string;
     const payload = this.authService.vaildateToken(authJwt);
     if (!payload) {
+      // TODO: 이부분 테스트하기
       res.redirect('/auth/login');
       return;
     }
 
     const room = await this.roomService.findById(id);
+    const isExist = this.roomService.isExistUser(room, payload.id);
     if (!room || !id) {
       console.log(`404 Not Found(Room:{id: ${id}})`);
       throw new NotFoundException();
+    } else if (!isExist) {
+      console.log('401 Unauthorized(Members:', room.members, ')');
+      throw new UnauthorizedException();
     }
     return {
       // 내부 데이터들 ejs에 넣는거 잊지 않도록 주의하기
       id: id,
       messages: room.messages,
-      roomid: id,
+      room: room,
     };
   }
 

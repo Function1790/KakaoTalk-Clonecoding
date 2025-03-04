@@ -12,14 +12,14 @@
 <body>
 
   <div class="chat-container">
-    <div class="chat-header">방제목</div>
+    <div class="chat-header"><%= room.name %></div>
     <div class="chat-messages">
     </div>
     <div class="chat-input">
       <input type="text" name="message" id="message" placeholder="메시지 입력">
       <button id="send">전송</button>
     </div>
-    <input type="hidden" id="roomid" value="<%= roomid %>" />
+    <input type="hidden" id="roomid" value="<%= room.id %>" />
   </div>
 
 </body>

@@ -44,4 +44,13 @@ export class RoomService {
     });
     return filteredRooms;
   }
+
+  isExistUser(room: Room, userId: number) {
+    for (let i = 0; i < room.members.length; i++) {
+      if (room.members[i].id == userId) {
+        return true;
+      }
+    }
+    return false;
+  }
 }
