@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>친구 추가</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/add-friend.css">
+</head>
+
+<body>
+  <div class="modal">
+    <div class="modal-header">
+      <span>친구 추가</span>
+      <span class="close">&times;</span>
+    </div>
+    <div class="tab-menu">
+      <div class="tab active">ID로 추가</div>
+      <div class="tab">이름으로 추가</div>
+    </div>
+    <form action="/chat/add/friend" method="post">
+      <input type="text" class="input-box" name="id" maxlength="20">
+      <button>친구추가</button>
+    </form>
+    <div class="content">
+      ID를 검색하여 친구를 찾으세요
+    </div>
+  </div>
+</body>
+
+</html>

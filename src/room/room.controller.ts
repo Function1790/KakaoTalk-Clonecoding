@@ -1,8 +1,10 @@
 import {
+  Body,
   Controller,
   Get,
   NotFoundException,
   Param,
+  Post,
   Render,
   Req,
   Res,
@@ -12,6 +14,7 @@ import { RoomService } from './room.service';
 import { ChatMessageService } from './chat-message.service';
 import { Request, Response } from 'express';
 import { AuthService } from 'src/auth/auth.service';
+import { UserService } from 'src/auth/user.service';
 
 // TODO: room.ejs 삭제하기
 @Controller('chat')
@@ -19,6 +22,7 @@ export class RoomController {
   constructor(
     private roomService: RoomService,
     private authService: AuthService,
+    private userService: UserService,
     private chatMessageService: ChatMessageService,
   ) {}
 
@@ -71,6 +75,58 @@ export class RoomController {
       messages: room.messages,
       userId: payload.id,
     };
+  }
+
+  @Get('friends')
+  @Render('friends')
+  async displayFriends(@Req() req: Request, @Res() res: Response) {
+    // 인가
+    const authJwt: string = req.cookies.token as string;
+    const payload = this.authService.vaildateToken(authJwt);
+    if (!payload) {
+      res.redirect('/auth/login');
+      return;
+    }
+    const user = await this.userService.findById(payload.id);
+    console.log(user.friends);
+    return {
+      me: user,
+      friends: user.friends,
+    };
+  }
+
+  @Get('add/friend')
+  @Render('add-friend')
+  addFriendRender() {
+    return;
+  }
+
+  @Post('add/friend')
+  async addFriend(
+    @Req() req: Request,
+    @Body('id') targetId: number,
+    @Res() res: Response,
+  ) {
+    // 인가
+    const authJwt: string = req.cookies.token as string;
+    const payload = this.authService.vaildateToken(authJwt);
+    if (!payload) {
+      res.redirect('/auth/login');
+      return;
+    }
+    // DB 조회
+    const me = await this.userService.findById(payload.id);
+    const friend = await this.userService.findById(targetId);
+    if (!me || !friend) {
+      console.log('존재하지 않는 ID');
+      res.redirect('/chat/add/friend');
+      return;
+    }
+    me.friends.push(friend); // 여기기
+    friend.friends.push(me);
+    await this.userService.update(me);
+    await this.userService.update(friend);
+    res.redirect('/chat/friends');
   }
 
   @Get('test')

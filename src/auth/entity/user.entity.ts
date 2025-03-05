@@ -1,5 +1,11 @@
 import { Room } from 'src/room/entity/room.eneity';
-import { Column, Entity, ManyToMany, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Column,
+  Entity,
+  JoinTable,
+  ManyToMany,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 
 @Entity()
 export class User {
@@ -14,4 +20,8 @@ export class User {
 
   @ManyToMany(() => Room, (room) => room.members)
   rooms: Room[];
+
+  @ManyToMany(() => User)
+  @JoinTable()
+  friends: User[];
 }

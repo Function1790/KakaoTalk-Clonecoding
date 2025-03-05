@@ -25,3 +25,23 @@
 .selected {
   opacity: 1;
 }
+
+.content {
+  padding: 40px;
+}
+
+.header {
+  justify-content: space-between;
+  padding: 23px 0;
+}
+
+.title {
+  font-weight: 600;
+  font-size: 33px;
+}
+
+.button-wrap {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+}

@@ -4,7 +4,7 @@ body {
 
 .chat-container {
   width: 400px;
-  height: 700px;
+  height: 600px;
   background-color: #d2e0f1;
   margin: 20px auto;
   border-radius: 10px;
@@ -30,7 +30,6 @@ body {
   flex-direction: column;
 }
 
-/* 2025-03-03 19:00 */
 .message-wrap {
   margin: 5px;
   display: flex;
@@ -62,6 +61,7 @@ body {
 }
 
 .message {
+  margin: 5px;
   max-width: 75%;
   width: fit-content;
   padding: 10px;
@@ -71,9 +71,9 @@ body {
   white-space: normal;   /* 75% 초과 시 자동 줄바꿈 */
   word-break: break-word;
 }
-/* 2025-03-03 19:00 */
 
-.receive-message {
+.receive-message{
+  margin: 0px;
   background-color: white;
   align-self: flex-start;
   border: 1px solid #ccc;
@@ -84,6 +84,20 @@ body {
   background-color: #ffeb3b;
   align-self: flex-end;
   position: relative;
+}
+
+.system-message {
+  user-select: none;
+  background-color: #0000000f;
+  align-self: center;
+  position: relative;
+  border-radius: 500px;
+  padding: 8px 15px;
+  color:white
+}
+
+.system-message:hover {
+  background-color: #00000017;
 }
 
 .reply {

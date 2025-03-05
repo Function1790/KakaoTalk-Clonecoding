@@ -13,7 +13,10 @@ export class UserService {
   ) {}
 
   async findById(id: number): ReturnUserEntity {
-    return await this.userRepository.findOneBy({ id: id });
+    return await this.userRepository.findOne({
+      where: { id },
+      relations: ['friends'],
+    });
   }
 
   async findByField(option: FindOneOptions<UserDTO>): ReturnUserEntity {
@@ -27,5 +30,9 @@ export class UserService {
   async save(user: UserDTO): Promise<User> {
     await this.encryptPassword(user);
     return await this.userRepository.save(user);
+  }
+
+  async update(user: User) {
+    await this.userRepository.save(user);
   }
 }
