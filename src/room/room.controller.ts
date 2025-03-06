@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import {
   Body,
   Controller,
@@ -88,7 +89,6 @@ export class RoomController {
       return;
     }
     const user = await this.userService.findById(payload.id);
-    console.log(user.friends);
     return {
       me: user,
       friends: user.friends,
@@ -127,6 +127,46 @@ export class RoomController {
     await this.userService.update(me);
     await this.userService.update(friend);
     res.redirect('/chat/friends');
+  }
+
+  @Get('/create/room')
+  @Render('create-room')
+  async createRoomRender(@Req() req: Request, @Res() res: Response) {
+    const authJwt: string = req.cookies.token as string;
+    const payload = this.authService.vaildateToken(authJwt);
+    if (!payload) {
+      res.redirect('/auth/login');
+      return;
+    }
+    const user = await this.userService.findById(payload.id);
+    return {
+      friends: user.friends,
+    };
+  }
+
+  @Post('/create/room')
+  async createRoom(
+    @Req() req: Request,
+    @Body('friends') friendsJSON: string,
+    @Res() res: Response,
+  ) {
+    const authJwt: string = req.cookies.token as string;
+    const payload = this.authService.vaildateToken(authJwt);
+    if (!payload) {
+      res.redirect('/auth/login');
+      return;
+    }
+    const user = await this.userService.findById(payload.id);
+    const friendIds: number[] = JSON.parse(friendsJSON);
+    const members = [];
+    user.friends.forEach((friend) => {
+      if (friendIds.indexOf(friend.id) != -1) {
+        members.push(friend);
+      }
+    });
+    members.push(user);
+    await this.roomService.create(members);
+    res.redirect('/chat');
   }
 
   @Get('test')

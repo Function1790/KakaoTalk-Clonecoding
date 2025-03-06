@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>대화상대 선택</title>
+  <link rel="stylesheet" href="/css/create-room.css">
+</head>
+
+<body>
+  <div class="modal">
+    <div class="modal-header">
+      <h3>대화상대 선택</h3>
+    </div>
+    <input type="text" class="search-box" placeholder="검색">
+    <div class="list">
+      <% friends.forEach((friend)=>{ %>
+        <div class="list-item" onclick="toggleSelect(this, Number('<%= friend.id %>'))">
+          <div class="profile">
+            <div class="profile-img"></div>
+            <span>
+              <%= friend.name %>
+            </span>
+          </div>
+          <div class="checkbox"></div>
+        </div>
+        <% }) %>
+    </div>
+    <div class="buttons">
+      <a href="/chat">
+        <button class="btn cancel">취소</button>
+      </a>
+      <form action="/chat/create/room" method="post">
+        <input type="hidden" id="data" name="friends" value="">
+        <button class="btn confirm">확인</button>
+      </form>
+    </div>
+  </div>
+  <script>
+    let selectedFriends = [];
+
+    function toggleSelect(element, name) {
+      element.classList.toggle('selected');
+      if (selectedFriends.includes(name)) {
+        selectedFriends = selectedFriends.filter(friend => friend !== name);
+      } else {
+        selectedFriends.push(name);
+      }
+      updateCheckbox(element);
+    }
+
+    const data = document.getElementById('data');
+    function updateCheckbox(element) {
+      const checkbox = element.querySelector('.checkbox');
+      if (element.classList.contains('selected')) {
+        checkbox.textContent = '✔';
+      } else {
+        checkbox.textContent = '';
+      }
+      data.value = JSON.stringify(selectedFriends)
+    }
+  </script>
+</body>
+
+</html>
