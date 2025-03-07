@@ -23,4 +23,8 @@ export class Room {
 
   @OneToMany(() => ChatMessage, (message) => message.room)
   messages: ChatMessage[];
+
+  getLastMessage() {
+    return this.messages[this.messages.length - 1];
+  }
 }

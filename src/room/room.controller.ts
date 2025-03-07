@@ -36,6 +36,16 @@ export class RoomController {
       return;
     }
     const rooms = await this.roomService.getRelatedRoomList(payload.id);
+    rooms.sort((a, b) => {
+      try {
+        return (
+          b.getLastMessage().createdAt.getTime() -
+          a.getLastMessage().createdAt.getTime()
+        );
+      } catch {
+        return 0;
+      }
+    });
     return {
       rooms,
     };

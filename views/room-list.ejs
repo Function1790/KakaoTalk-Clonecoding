@@ -49,7 +49,11 @@
                   <%= room.members.length %>
                 </div>
               </div>
-              <div class="room-last-chat">Hello world</div>
+              <div class="room-last-chat">
+                <% if (room.messages.length> 0) { %>
+                  <%= room.getLastMessage().content %>
+                <% } %>
+              </div>
             </div>
           </div>
           <% }) %>
